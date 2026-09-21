@@ -1,0 +1,1139 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 17.4
+-- Dumped by pg_dump version 17.4
+
+-- Started on 2026-09-20 21:55:23
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 226 (class 1259 OID 18439)
+-- Name: almacena; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.almacena (
+    id_producto integer,
+    id_deposito integer,
+    ubicacion character varying(11),
+    cantidad integer NOT NULL
+);
+
+
+ALTER TABLE public.almacena OWNER TO postgres;
+
+--
+-- TOC entry 243 (class 1259 OID 18559)
+-- Name: auditoria; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auditoria (
+    id bigint NOT NULL,
+    id_modificado bigint,
+    fecha_hora timestamp without time zone NOT NULL,
+    operacion text NOT NULL,
+    tabla character varying(15) NOT NULL,
+    valor text
+);
+
+
+ALTER TABLE public.auditoria OWNER TO postgres;
+
+--
+-- TOC entry 242 (class 1259 OID 18558)
+-- Name: auditoria_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auditoria_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.auditoria_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5042 (class 0 OID 0)
+-- Dependencies: 242
+-- Name: auditoria_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auditoria_id_seq OWNED BY public.auditoria.id;
+
+
+--
+-- TOC entry 218 (class 1259 OID 18394)
+-- Name: categoria; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.categoria (
+    id_categoria smallint NOT NULL,
+    categoria character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.categoria OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 18393)
+-- Name: categoria_id_categoria_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.categoria_id_categoria_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.categoria_id_categoria_seq OWNER TO postgres;
+
+--
+-- TOC entry 5043 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: categoria_id_categoria_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.categoria_id_categoria_seq OWNED BY public.categoria.id_categoria;
+
+
+--
+-- TOC entry 223 (class 1259 OID 18424)
+-- Name: codigo_producto; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.codigo_producto (
+    id_producto integer,
+    codigo character varying(13) NOT NULL
+);
+
+
+ALTER TABLE public.codigo_producto OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1259 OID 18476)
+-- Name: compra; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.compra (
+    id_compra bigint NOT NULL,
+    id_proveedor integer,
+    fecha timestamp without time zone NOT NULL,
+    fecha_pagada date,
+    total numeric(10,2) NOT NULL,
+    pagado numeric(10,2) NOT NULL,
+    dias_pago smallint
+);
+
+
+ALTER TABLE public.compra OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1259 OID 18475)
+-- Name: compra_id_compra_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.compra_id_compra_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.compra_id_compra_seq OWNER TO postgres;
+
+--
+-- TOC entry 5044 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: compra_id_compra_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.compra_id_compra_seq OWNED BY public.compra.id_compra;
+
+
+--
+-- TOC entry 225 (class 1259 OID 18433)
+-- Name: deposito; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.deposito (
+    id_deposito integer NOT NULL,
+    deposito integer NOT NULL
+);
+
+
+ALTER TABLE public.deposito OWNER TO postgres;
+
+--
+-- TOC entry 224 (class 1259 OID 18432)
+-- Name: deposito_id_deposito_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.deposito_id_deposito_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.deposito_id_deposito_seq OWNER TO postgres;
+
+--
+-- TOC entry 5045 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: deposito_id_deposito_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.deposito_id_deposito_seq OWNED BY public.deposito.id_deposito;
+
+
+--
+-- TOC entry 232 (class 1259 OID 18487)
+-- Name: detalle_compra; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.detalle_compra (
+    id_compra bigint,
+    id_producto integer,
+    cantidad integer NOT NULL
+);
+
+
+ALTER TABLE public.detalle_compra OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 18401)
+-- Name: familia; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.familia (
+    id_familia smallint NOT NULL,
+    familia character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.familia OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 18400)
+-- Name: familia_id_familia_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.familia_id_familia_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.familia_id_familia_seq OWNER TO postgres;
+
+--
+-- TOC entry 5046 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: familia_id_familia_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.familia_id_familia_seq OWNED BY public.familia.id_familia;
+
+
+--
+-- TOC entry 229 (class 1259 OID 18462)
+-- Name: lista_productos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.lista_productos (
+    id_producto integer,
+    id_proveedor integer,
+    precio numeric(10,2) NOT NULL
+);
+
+
+ALTER TABLE public.lista_productos OWNER TO postgres;
+
+--
+-- TOC entry 236 (class 1259 OID 18513)
+-- Name: nota; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.nota (
+    id_nota bigint NOT NULL,
+    id_proveedor integer,
+    tipo character varying(10) NOT NULL,
+    fecha date NOT NULL,
+    monto numeric(10,2) NOT NULL,
+    descripcion character varying(100)
+);
+
+
+ALTER TABLE public.nota OWNER TO postgres;
+
+--
+-- TOC entry 235 (class 1259 OID 18512)
+-- Name: nota_id_nota_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.nota_id_nota_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.nota_id_nota_seq OWNER TO postgres;
+
+--
+-- TOC entry 5047 (class 0 OID 0)
+-- Dependencies: 235
+-- Name: nota_id_nota_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.nota_id_nota_seq OWNED BY public.nota.id_nota;
+
+
+--
+-- TOC entry 234 (class 1259 OID 18501)
+-- Name: pago; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.pago (
+    id_pago bigint NOT NULL,
+    id_proveedor integer,
+    fecha timestamp without time zone NOT NULL,
+    monto numeric(10,2) NOT NULL,
+    descripcion character varying(100)
+);
+
+
+ALTER TABLE public.pago OWNER TO postgres;
+
+--
+-- TOC entry 233 (class 1259 OID 18500)
+-- Name: pago_id_pago_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.pago_id_pago_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.pago_id_pago_seq OWNER TO postgres;
+
+--
+-- TOC entry 5048 (class 0 OID 0)
+-- Dependencies: 233
+-- Name: pago_id_pago_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.pago_id_pago_seq OWNED BY public.pago.id_pago;
+
+
+--
+-- TOC entry 240 (class 1259 OID 18535)
+-- Name: permiso; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.permiso (
+    id_permiso integer NOT NULL,
+    codigo_permiso character varying(50) NOT NULL,
+    descripcion text,
+    modulo character varying(50)
+);
+
+
+ALTER TABLE public.permiso OWNER TO postgres;
+
+--
+-- TOC entry 239 (class 1259 OID 18534)
+-- Name: permiso_id_permiso_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.permiso_id_permiso_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.permiso_id_permiso_seq OWNER TO postgres;
+
+--
+-- TOC entry 5049 (class 0 OID 0)
+-- Dependencies: 239
+-- Name: permiso_id_permiso_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.permiso_id_permiso_seq OWNED BY public.permiso.id_permiso;
+
+
+--
+-- TOC entry 241 (class 1259 OID 18543)
+-- Name: permiso_usuario; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.permiso_usuario (
+    id_usuario integer NOT NULL,
+    id_permiso integer NOT NULL
+);
+
+
+ALTER TABLE public.permiso_usuario OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 18408)
+-- Name: producto; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.producto (
+    id_producto integer NOT NULL,
+    id_categoria smallint,
+    id_familia smallint,
+    nombre character varying(50) NOT NULL,
+    precio numeric(10,2) NOT NULL,
+    stock integer NOT NULL,
+    stock_minimo smallint NOT NULL,
+    factor_conversion numeric(8,2)
+);
+
+
+ALTER TABLE public.producto OWNER TO postgres;
+
+--
+-- TOC entry 221 (class 1259 OID 18407)
+-- Name: producto_id_producto_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.producto_id_producto_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.producto_id_producto_seq OWNER TO postgres;
+
+--
+-- TOC entry 5050 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: producto_id_producto_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.producto_id_producto_seq OWNED BY public.producto.id_producto;
+
+
+--
+-- TOC entry 228 (class 1259 OID 18453)
+-- Name: proveedor; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.proveedor (
+    id_proveedor integer NOT NULL,
+    razon_social character varying(50) NOT NULL,
+    cuit character varying(11) NOT NULL,
+    domicilio character varying(50),
+    telefono character varying(13)[],
+    correo_electronico character varying(50),
+    saldo double precision,
+    activo boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE public.proveedor OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 18452)
+-- Name: proveedor_id_proveedor_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.proveedor_id_proveedor_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.proveedor_id_proveedor_seq OWNER TO postgres;
+
+--
+-- TOC entry 5051 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: proveedor_id_proveedor_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.proveedor_id_proveedor_seq OWNED BY public.proveedor.id_proveedor;
+
+
+--
+-- TOC entry 238 (class 1259 OID 18525)
+-- Name: usuario; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.usuario (
+    id_usuario integer NOT NULL,
+    nombre_usuario character varying(50) NOT NULL,
+    contrasena character(64) NOT NULL,
+    email character varying(50) NOT NULL,
+    nombre character varying(50) NOT NULL,
+    apellido character varying(50) NOT NULL,
+    activo boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE public.usuario OWNER TO postgres;
+
+--
+-- TOC entry 237 (class 1259 OID 18524)
+-- Name: usuario_id_usuario_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.usuario_id_usuario_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.usuario_id_usuario_seq OWNER TO postgres;
+
+--
+-- TOC entry 5052 (class 0 OID 0)
+-- Dependencies: 237
+-- Name: usuario_id_usuario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.usuario_id_usuario_seq OWNED BY public.usuario.id_usuario;
+
+
+--
+-- TOC entry 4824 (class 2604 OID 18562)
+-- Name: auditoria id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auditoria ALTER COLUMN id SET DEFAULT nextval('public.auditoria_id_seq'::regclass);
+
+
+--
+-- TOC entry 4812 (class 2604 OID 18397)
+-- Name: categoria id_categoria; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categoria ALTER COLUMN id_categoria SET DEFAULT nextval('public.categoria_id_categoria_seq'::regclass);
+
+
+--
+-- TOC entry 4818 (class 2604 OID 18479)
+-- Name: compra id_compra; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.compra ALTER COLUMN id_compra SET DEFAULT nextval('public.compra_id_compra_seq'::regclass);
+
+
+--
+-- TOC entry 4815 (class 2604 OID 18436)
+-- Name: deposito id_deposito; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.deposito ALTER COLUMN id_deposito SET DEFAULT nextval('public.deposito_id_deposito_seq'::regclass);
+
+
+--
+-- TOC entry 4813 (class 2604 OID 18404)
+-- Name: familia id_familia; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.familia ALTER COLUMN id_familia SET DEFAULT nextval('public.familia_id_familia_seq'::regclass);
+
+
+--
+-- TOC entry 4820 (class 2604 OID 18516)
+-- Name: nota id_nota; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.nota ALTER COLUMN id_nota SET DEFAULT nextval('public.nota_id_nota_seq'::regclass);
+
+
+--
+-- TOC entry 4819 (class 2604 OID 18504)
+-- Name: pago id_pago; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pago ALTER COLUMN id_pago SET DEFAULT nextval('public.pago_id_pago_seq'::regclass);
+
+
+--
+-- TOC entry 4823 (class 2604 OID 18538)
+-- Name: permiso id_permiso; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.permiso ALTER COLUMN id_permiso SET DEFAULT nextval('public.permiso_id_permiso_seq'::regclass);
+
+
+--
+-- TOC entry 4814 (class 2604 OID 18411)
+-- Name: producto id_producto; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.producto ALTER COLUMN id_producto SET DEFAULT nextval('public.producto_id_producto_seq'::regclass);
+
+
+--
+-- TOC entry 4816 (class 2604 OID 18456)
+-- Name: proveedor id_proveedor; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.proveedor ALTER COLUMN id_proveedor SET DEFAULT nextval('public.proveedor_id_proveedor_seq'::regclass);
+
+
+--
+-- TOC entry 4821 (class 2604 OID 18528)
+-- Name: usuario id_usuario; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuario ALTER COLUMN id_usuario SET DEFAULT nextval('public.usuario_id_usuario_seq'::regclass);
+
+
+--
+-- TOC entry 5019 (class 0 OID 18439)
+-- Dependencies: 226
+-- Data for Name: almacena; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.almacena (id_producto, id_deposito, ubicacion, cantidad) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5036 (class 0 OID 18559)
+-- Dependencies: 243
+-- Data for Name: auditoria; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auditoria (id, id_modificado, fecha_hora, operacion, tabla, valor) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5011 (class 0 OID 18394)
+-- Dependencies: 218
+-- Data for Name: categoria; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.categoria (id_categoria, categoria) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5016 (class 0 OID 18424)
+-- Dependencies: 223
+-- Data for Name: codigo_producto; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.codigo_producto (id_producto, codigo) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5024 (class 0 OID 18476)
+-- Dependencies: 231
+-- Data for Name: compra; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.compra (id_compra, id_proveedor, fecha, fecha_pagada, total, pagado, dias_pago) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5018 (class 0 OID 18433)
+-- Dependencies: 225
+-- Data for Name: deposito; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.deposito (id_deposito, deposito) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5025 (class 0 OID 18487)
+-- Dependencies: 232
+-- Data for Name: detalle_compra; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.detalle_compra (id_compra, id_producto, cantidad) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5013 (class 0 OID 18401)
+-- Dependencies: 220
+-- Data for Name: familia; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.familia (id_familia, familia) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5022 (class 0 OID 18462)
+-- Dependencies: 229
+-- Data for Name: lista_productos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.lista_productos (id_producto, id_proveedor, precio) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5029 (class 0 OID 18513)
+-- Dependencies: 236
+-- Data for Name: nota; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.nota (id_nota, id_proveedor, tipo, fecha, monto, descripcion) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5027 (class 0 OID 18501)
+-- Dependencies: 234
+-- Data for Name: pago; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.pago (id_pago, id_proveedor, fecha, monto, descripcion) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5033 (class 0 OID 18535)
+-- Dependencies: 240
+-- Data for Name: permiso; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.permiso (id_permiso, codigo_permiso, descripcion, modulo) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5034 (class 0 OID 18543)
+-- Dependencies: 241
+-- Data for Name: permiso_usuario; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.permiso_usuario (id_usuario, id_permiso) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5015 (class 0 OID 18408)
+-- Dependencies: 222
+-- Data for Name: producto; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.producto (id_producto, id_categoria, id_familia, nombre, precio, stock, stock_minimo, factor_conversion) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5021 (class 0 OID 18453)
+-- Dependencies: 228
+-- Data for Name: proveedor; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.proveedor (id_proveedor, razon_social, cuit, domicilio, telefono, correo_electronico, saldo, activo) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5031 (class 0 OID 18525)
+-- Dependencies: 238
+-- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.usuario (id_usuario, nombre_usuario, contrasena, email, nombre, apellido, activo) FROM stdin;
+\.
+
+
+--
+-- TOC entry 5053 (class 0 OID 0)
+-- Dependencies: 242
+-- Name: auditoria_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auditoria_id_seq', 1, false);
+
+
+--
+-- TOC entry 5054 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: categoria_id_categoria_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.categoria_id_categoria_seq', 1, false);
+
+
+--
+-- TOC entry 5055 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: compra_id_compra_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.compra_id_compra_seq', 1, false);
+
+
+--
+-- TOC entry 5056 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: deposito_id_deposito_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.deposito_id_deposito_seq', 1, false);
+
+
+--
+-- TOC entry 5057 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: familia_id_familia_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.familia_id_familia_seq', 1, false);
+
+
+--
+-- TOC entry 5058 (class 0 OID 0)
+-- Dependencies: 235
+-- Name: nota_id_nota_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.nota_id_nota_seq', 1, false);
+
+
+--
+-- TOC entry 5059 (class 0 OID 0)
+-- Dependencies: 233
+-- Name: pago_id_pago_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.pago_id_pago_seq', 1, false);
+
+
+--
+-- TOC entry 5060 (class 0 OID 0)
+-- Dependencies: 239
+-- Name: permiso_id_permiso_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.permiso_id_permiso_seq', 1, false);
+
+
+--
+-- TOC entry 5061 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: producto_id_producto_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.producto_id_producto_seq', 1, false);
+
+
+--
+-- TOC entry 5062 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: proveedor_id_proveedor_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.proveedor_id_proveedor_seq', 1, false);
+
+
+--
+-- TOC entry 5063 (class 0 OID 0)
+-- Dependencies: 237
+-- Name: usuario_id_usuario_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.usuario_id_usuario_seq', 1, false);
+
+
+--
+-- TOC entry 4850 (class 2606 OID 18566)
+-- Name: auditoria auditoria_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auditoria
+    ADD CONSTRAINT auditoria_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4826 (class 2606 OID 18399)
+-- Name: categoria categoria_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categoria
+    ADD CONSTRAINT categoria_pkey PRIMARY KEY (id_categoria);
+
+
+--
+-- TOC entry 4836 (class 2606 OID 18481)
+-- Name: compra compra_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.compra
+    ADD CONSTRAINT compra_pkey PRIMARY KEY (id_compra);
+
+
+--
+-- TOC entry 4832 (class 2606 OID 18438)
+-- Name: deposito deposito_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.deposito
+    ADD CONSTRAINT deposito_pkey PRIMARY KEY (id_deposito);
+
+
+--
+-- TOC entry 4828 (class 2606 OID 18406)
+-- Name: familia familia_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.familia
+    ADD CONSTRAINT familia_pkey PRIMARY KEY (id_familia);
+
+
+--
+-- TOC entry 4840 (class 2606 OID 18518)
+-- Name: nota nota_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.nota
+    ADD CONSTRAINT nota_pkey PRIMARY KEY (id_nota);
+
+
+--
+-- TOC entry 4838 (class 2606 OID 18506)
+-- Name: pago pago_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pago
+    ADD CONSTRAINT pago_pkey PRIMARY KEY (id_pago);
+
+
+--
+-- TOC entry 4846 (class 2606 OID 18542)
+-- Name: permiso permiso_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.permiso
+    ADD CONSTRAINT permiso_pkey PRIMARY KEY (id_permiso);
+
+
+--
+-- TOC entry 4848 (class 2606 OID 18547)
+-- Name: permiso_usuario permiso_usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.permiso_usuario
+    ADD CONSTRAINT permiso_usuario_pkey PRIMARY KEY (id_usuario, id_permiso);
+
+
+--
+-- TOC entry 4830 (class 2606 OID 18413)
+-- Name: producto producto_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.producto
+    ADD CONSTRAINT producto_pkey PRIMARY KEY (id_producto);
+
+
+--
+-- TOC entry 4834 (class 2606 OID 18461)
+-- Name: proveedor proveedor_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.proveedor
+    ADD CONSTRAINT proveedor_pkey PRIMARY KEY (id_proveedor);
+
+
+--
+-- TOC entry 4842 (class 2606 OID 18533)
+-- Name: usuario usuario_nombre_usuario_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuario
+    ADD CONSTRAINT usuario_nombre_usuario_key UNIQUE (nombre_usuario);
+
+
+--
+-- TOC entry 4844 (class 2606 OID 18531)
+-- Name: usuario usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuario
+    ADD CONSTRAINT usuario_pkey PRIMARY KEY (id_usuario);
+
+
+--
+-- TOC entry 4854 (class 2606 OID 18447)
+-- Name: almacena almacena_id_deposito_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.almacena
+    ADD CONSTRAINT almacena_id_deposito_fkey FOREIGN KEY (id_deposito) REFERENCES public.deposito(id_deposito);
+
+
+--
+-- TOC entry 4855 (class 2606 OID 18442)
+-- Name: almacena almacena_id_producto_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.almacena
+    ADD CONSTRAINT almacena_id_producto_fkey FOREIGN KEY (id_producto) REFERENCES public.producto(id_producto);
+
+
+--
+-- TOC entry 4853 (class 2606 OID 18427)
+-- Name: codigo_producto codigo_producto_id_producto_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.codigo_producto
+    ADD CONSTRAINT codigo_producto_id_producto_fkey FOREIGN KEY (id_producto) REFERENCES public.producto(id_producto) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4858 (class 2606 OID 18482)
+-- Name: compra compra_id_proveedor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.compra
+    ADD CONSTRAINT compra_id_proveedor_fkey FOREIGN KEY (id_proveedor) REFERENCES public.proveedor(id_proveedor);
+
+
+--
+-- TOC entry 4859 (class 2606 OID 18490)
+-- Name: detalle_compra detalle_compra_id_compra_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.detalle_compra
+    ADD CONSTRAINT detalle_compra_id_compra_fkey FOREIGN KEY (id_compra) REFERENCES public.compra(id_compra) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4860 (class 2606 OID 18495)
+-- Name: detalle_compra detalle_compra_id_producto_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.detalle_compra
+    ADD CONSTRAINT detalle_compra_id_producto_fkey FOREIGN KEY (id_producto) REFERENCES public.producto(id_producto);
+
+
+--
+-- TOC entry 4856 (class 2606 OID 18465)
+-- Name: lista_productos lista_productos_id_producto_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_productos
+    ADD CONSTRAINT lista_productos_id_producto_fkey FOREIGN KEY (id_producto) REFERENCES public.producto(id_producto);
+
+
+--
+-- TOC entry 4857 (class 2606 OID 18470)
+-- Name: lista_productos lista_productos_id_proveedor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_productos
+    ADD CONSTRAINT lista_productos_id_proveedor_fkey FOREIGN KEY (id_proveedor) REFERENCES public.proveedor(id_proveedor);
+
+
+--
+-- TOC entry 4862 (class 2606 OID 18519)
+-- Name: nota nota_id_proveedor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.nota
+    ADD CONSTRAINT nota_id_proveedor_fkey FOREIGN KEY (id_proveedor) REFERENCES public.proveedor(id_proveedor);
+
+
+--
+-- TOC entry 4861 (class 2606 OID 18507)
+-- Name: pago pago_id_proveedor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pago
+    ADD CONSTRAINT pago_id_proveedor_fkey FOREIGN KEY (id_proveedor) REFERENCES public.proveedor(id_proveedor);
+
+
+--
+-- TOC entry 4863 (class 2606 OID 18553)
+-- Name: permiso_usuario permiso_usuario_id_permiso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.permiso_usuario
+    ADD CONSTRAINT permiso_usuario_id_permiso_fkey FOREIGN KEY (id_permiso) REFERENCES public.permiso(id_permiso) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4864 (class 2606 OID 18548)
+-- Name: permiso_usuario permiso_usuario_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.permiso_usuario
+    ADD CONSTRAINT permiso_usuario_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.usuario(id_usuario) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4851 (class 2606 OID 18414)
+-- Name: producto producto_id_categoria_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.producto
+    ADD CONSTRAINT producto_id_categoria_fkey FOREIGN KEY (id_categoria) REFERENCES public.categoria(id_categoria);
+
+
+--
+-- TOC entry 4852 (class 2606 OID 18419)
+-- Name: producto producto_id_familia_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.producto
+    ADD CONSTRAINT producto_id_familia_fkey FOREIGN KEY (id_familia) REFERENCES public.familia(id_familia);
+
+
+-- Completed on 2026-09-20 21:55:24
+
+--
+-- PostgreSQL database dump complete
+--
+
