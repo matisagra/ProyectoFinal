@@ -27,6 +27,6 @@ Actualiza los datos de usuario y contraseña de tu servidor PostgreSQL:
 }
 
 ### 4. Ejecutar el proyecto
-Ejecuta los siguientes comandos en la terminal dentro de la carpeta del proyecto:
+Ejecuta:
 dotnet restore
 dotnet run
